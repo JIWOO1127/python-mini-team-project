@@ -6,9 +6,13 @@ python-dotenv
 kaggle
 scikit-learn
 xgboost
+lightgbm
+imbalanced-learn
+statsmodels
 joblib
 fastapi
 uvicorn[standard]
 pytest
 httpx
 selenium
+ipykernel
