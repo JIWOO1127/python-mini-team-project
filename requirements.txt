@@ -1,0 +1,14 @@
+pandas
+matplotlib
+requests
+beautifulsoup4
+python-dotenv
+kaggle
+scikit-learn
+xgboost
+joblib
+fastapi
+uvicorn[standard]
+pytest
+httpx
+selenium
