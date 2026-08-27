@@ -497,7 +497,7 @@ class EVChargingApp:
 
         probability = result.get("probability")
         probability_text = (
-            f" · 불량 확률 {probability * 100:.1f}%"
+            f" · 불량 확률 {probability * 100:.2f}%"
             if probability is not None
             else ""
         )

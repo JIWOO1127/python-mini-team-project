@@ -5,11 +5,11 @@ beautifulsoup4
 python-dotenv
 kaggle
 scikit-learn
-xgboost
+xgboost==3.2.0
+joblib==1.5.3
 lightgbm
 imbalanced-learn
 statsmodels
-joblib
 fastapi
 uvicorn[standard]
 pytest

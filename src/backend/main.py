@@ -1,6 +1,14 @@
 """FastAPI entry point for the EV Charging Assistant backend."""
 
+from pathlib import Path
+
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+load_dotenv(PROJECT_ROOT / ".env")
+
 
 from src.apis.temperature import TemperatureError
 from src.backend.schemas import (

@@ -1,4 +1,4 @@
-"""Load vehicle rows and run the battery failure model."""
+"""Load vehicle rows and run the single battery diagnosis model."""
 
 from pathlib import Path
 
@@ -9,6 +9,9 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 MODEL_PATH = PROJECT_ROOT / "models" / "battery_failure_model.pkl"
 VEHICLE_DATA_PATH = PROJECT_ROOT / "data" / "vehicle_samples" / "vehicles.csv"
+
+# Used only while the real model file is absent.
+MOCK_PREDICTION = "abnormal"
 
 FINAL_COLS = [
     "manufacturing_year", "odometer_km", "cycle_count",
@@ -22,19 +25,17 @@ FINAL_COLS = [
 
 
 def build_model_input(values):
-    """Build a one-row float DataFrame in the training-column order."""
+    """Build a one-row DataFrame in the exact training-column order."""
     missing = [column for column in FINAL_COLS if column not in values]
     if missing:
         raise ValueError(f"모델 입력값이 부족합니다: {', '.join(missing)}")
     return pd.DataFrame(
-        [[values[column] for column in FINAL_COLS]],
-        columns=FINAL_COLS,
-        dtype=float,
+        [[values[column] for column in FINAL_COLS]], columns=FINAL_COLS,
     )
 
 
 def load_vehicle(vehicle_id):
-    """Find one vehicle and prepare its model input."""
+    """Find one vehicle in the UI lookup CSV, case-insensitively."""
     vehicle_id = vehicle_id.strip()
     if not vehicle_id:
         raise ValueError("차량 ID를 입력해주세요.")
@@ -58,16 +59,10 @@ def load_vehicle(vehicle_id):
     if len(matches) > 1:
         raise ValueError(f"차량 ID가 CSV에 중복되어 있습니다: {vehicle_id}")
 
-    row = matches.iloc[0].copy()
-    for column in FINAL_COLS:
-        if pd.isna(row[column]):
-            median = pd.to_numeric(data[column], errors="coerce").median()
-            if pd.isna(median):
-                raise ValueError(f"결측치를 대체할 수 없는 컬럼입니다: {column}")
-            row[column] = median
-
+    row = matches.iloc[0]
     return {
         "vehicle_id": str(row["vehicle_id"]).strip(),
+        "vehicle_model": str(row.get("vehicle_model", "")).strip(),
         "model_input": build_model_input(row.to_dict()),
     }
 
@@ -79,7 +74,6 @@ def load_model():
 
 
 def _status_for_label(label):
-    """Map the training label (0=normal, 1=failure) to API status."""
     normalized = str(label).strip().lower()
     if normalized in {"0", "0.0", "normal"}:
         return "normal"
@@ -102,14 +96,20 @@ def _failure_probability(model, model_input):
 def predict_vehicle(vehicle_id):
     """Look up a vehicle and return a normalized diagnosis payload."""
     vehicle = load_vehicle(vehicle_id)
-    model = load_model()
-    if not hasattr(model, "predict"):
-        raise TypeError("모델에 predict 함수가 없습니다.")
 
-    prediction = model.predict(vehicle["model_input"])[0]
-    probability = _failure_probability(model, vehicle["model_input"])
+    if not MODEL_PATH.exists():
+        prediction = MOCK_PREDICTION
+        probability = None
+    else:
+        model = load_model()
+        if not hasattr(model, "predict"):
+            raise TypeError("모델에 predict 함수가 없습니다.")
+        prediction = model.predict(vehicle["model_input"])[0]
+        probability = _failure_probability(model, vehicle["model_input"])
+
     return {
         "vehicle_id": vehicle["vehicle_id"],
+        "vehicle_model": vehicle["vehicle_model"],
         "prediction": str(prediction),
         "status": _status_for_label(prediction),
         "probability": probability,
