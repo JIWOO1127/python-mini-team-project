@@ -4,3 +4,45 @@ venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/ 
+=======
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Generated / downloaded data (keep folder structure)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/*.csv
+
+# Kaggle kernel downloads
+notebook/
+
+# Notebook-generated model versions (production model stays tracked)
+models/battery_failure_model_v*_notebook_*.pkl
