@@ -10,7 +10,7 @@ from src.backend.schemas import (
 from src.crawlers.charging_cache import cached_station_search
 from src.crawlers.crawler import recommend_stations, search_charging_stations
 from src.crawlers.crawler2 import search_service_centers
-from src.ml.predictor import predict_vehicle
+from src.ml.predictor_lgbm import predict_vehicle
 
 
 def get_recommendations(request: RecommendationRequest) -> RecommendationResponse:
