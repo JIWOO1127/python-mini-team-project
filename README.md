@@ -4,6 +4,13 @@ FastAPI 백엔드와 Tkinter 데스크톱 UI로 만든 EV 배터리 진단 및 �
 
 권장 실행 환경은 Python 3.13.15, LightGBM 4.7.0, XGBoost 3.2.0, Joblib 1.5.3, scikit-learn 1.7.2입니다. 버전 기준은 `runtime_versions.json`에 기록돼 있습니다.
 
+## 시연 영상
+
+https://github.com/user-attachments/assets/769426cb-e80e-4f8f-ba3e-7949a4edeb40
+
+## 아키텍쳐
+<img width="6208" height="4318" alt="architecture" src="https://github.com/user-attachments/assets/2579939b-8175-4168-81ef-da6795edba2c" />
+
 ## 주요 기능
 
 - 테스트용 차량 ID를 이용한 배터리 정상/이상 예측, 고장 확률, 고위험 상태 지표 Top 3
