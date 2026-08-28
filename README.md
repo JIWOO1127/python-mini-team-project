@@ -32,8 +32,9 @@ FastAPI 백엔드와 Tkinter 데스크톱 UI로 만든 EV 배터리 진단 및 �
 | **외부 API** | Kakao Local · 기상청 초단기실황 | 주소 → 위경도 지오코딩, 실시간 기온 기반 충전 방식 추천 |
 
 ## 시연 영상
+https://github.com/user-attachments/assets/1edd70cf-b7cf-4a2f-8f64-ff33c5351d39
 
-https://github.com/user-attachments/assets/769426cb-e80e-4f8f-ba3e-7949a4edeb40
+
 
 ## 아키텍쳐
 <img width="2000" height="1400" alt="ev-battery-service-architecture (2)" src="https://github.com/user-attachments/assets/041b194c-6eaf-4553-9df6-3861d604b1aa" />
