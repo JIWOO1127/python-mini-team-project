@@ -1,5 +1,11 @@
 # EV 배터리 진단·충전/서비스 안내
 
+FastAPI 백엔드와 Tkinter 데스크톱 UI로 만든 EV 배터리 진단 및 인프라 안내 서비스입니다. 활성 모델과 피처 계약은 `models/model_manifest.json`을 기준으로 관리합니다.
+
+권장 실행 환경은 Python 3.13.15, LightGBM 4.7.0, XGBoost 3.2.0, Joblib 1.5.3, scikit-learn 1.7.2입니다. 버전 기준은 `runtime_versions.json`에 기록돼 있습니다.
+
+## 기술 스택
+
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![Uvicorn](https://img.shields.io/badge/Uvicorn-1F6F5C?style=flat-square)
@@ -16,9 +22,6 @@
 ![requests](https://img.shields.io/badge/requests-2C3E50?style=flat-square)
 ![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)
 
-
-## 기술 스택
-
 | 레이어 | 주요 기술 | 역할 |
 | :--- | :--- | :--- |
 | **데스크톱 UI** | `tkinter` · `threading` · `requests` | 2-Step 카드 UI, 비동기 워커로 네트워크 대기 중 화면 멈춤 방지 |
@@ -27,8 +30,6 @@
 | **데이터 처리** | `pandas` | 차량 CSV 조회, 모델 입력 구성, 검색 결과 CSV 캐시 |
 | **외부 수집** | `BeautifulSoup4` · `Selenium` | 충전소 HTML 파싱, 제조사 공식 카탈로그 수집(Headless Chrome) |
 | **외부 API** | Kakao Local · 기상청 초단기실황 | 주소 → 위경도 지오코딩, 실시간 기온 기반 충전 방식 추천 |
-
-> `scikit-learn`은 반드시 **1.7.2**를 사용해야 합니다. 활성 모델 번들의 `SimpleImputer`가 해당 버전으로 직렬화되어 있어, 상위 버전에서는 `/api/v1/diagnoses` 호출 시 `AttributeError`로 500이 발생합니다.
 
 ## 시연 영상
 
