@@ -164,18 +164,29 @@ def parse_charging_stations(html):
     return stations
 
 
-def get_search_locations(location):
-    """상세 주소부터 상위 지역까지 검색할 위치 목록을 반환한다."""
+def search_charging_stations(location):
+    """
+    ChargeCheck에서 입력한 위치의
+    전기차 충전소를 검색한다.
 
-    words = location.strip().split()
-    return [
-        " ".join(words[:word_count])
-        for word_count in range(len(words), 0, -1)
-    ]
+    Parameters
+    ----------
+    location : str
+        예:
+        '경기도 수원시 영통구 영통동'
 
+    Returns
+    -------
+    list[dict]
+        충전소 정보 목록
+    """
 
-def _fetch_charging_stations(location):
-    """ChargeCheck에서 한 지역을 조회하고 파싱한 결과를 반환한다."""
+    location = location.strip()
+
+    if not location:
+        raise ChargeCheckError(
+            "검색할 위치를 입력해주세요."
+        )
 
     params = {
         "q": location
@@ -204,41 +215,16 @@ def _fetch_charging_stations(location):
             "충전소 정보를 불러오지 못했습니다."
         ) from exc
 
-    return parse_charging_stations(response.text)
+    stations = parse_charging_stations(
+        response.text
+    )
 
-
-def search_charging_stations(location):
-    """
-    ChargeCheck에서 입력한 위치의
-    전기차 충전소를 검색한다.
-
-    Parameters
-    ----------
-    location : str
-        예:
-        '경기도 수원시 영통구 영통동'
-
-    Returns
-    -------
-    list[dict]
-        충전소 정보 목록
-    """
-
-    location = location.strip()
-
-    if not location:
+    if not stations:
         raise ChargeCheckError(
-            "검색할 위치를 입력해주세요."
+            "검색된 충전소가 없습니다."
         )
 
-    for search_location in get_search_locations(location):
-        stations = _fetch_charging_stations(search_location)
-        if stations:
-            return stations
-
-    raise ChargeCheckError(
-        "검색된 충전소가 없습니다."
-    )
+    return stations
 
 
 def filter_slow_stations(stations):
