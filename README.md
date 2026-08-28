@@ -36,7 +36,8 @@ FastAPI 백엔드와 Tkinter 데스크톱 UI로 만든 EV 배터리 진단 및 �
 https://github.com/user-attachments/assets/769426cb-e80e-4f8f-ba3e-7949a4edeb40
 
 ## 아키텍쳐
-<img width="6208" height="4318" alt="architecture" src="https://github.com/user-attachments/assets/2579939b-8175-4168-81ef-da6795edba2c" />
+<img width="1964" height="1334" alt="architecture-compact" src="https://github.com/user-attachments/assets/657c178b-1f1e-4e2f-afe7-aa4842bd02b3" />
+
 
 ## 주요 기능
 
