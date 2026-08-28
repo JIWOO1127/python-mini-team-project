@@ -1,0 +1,83 @@
+{
+  "version": "lightgbm-ver2",
+  "model_type": "LightGBM classifier (ver2)",
+  "model_path": "models/lightgbm-ver2/lgbm_battery_model.pkl",
+  "test_data_path": "data/test/lightgbm-ver2/vehicles.csv",
+  "metadata_data_path": "data/test/default/vehicles.csv",
+  "feature_profile_path": "data/test/lightgbm-ver2/feature_profile.json",
+  "feature_columns": [
+    "capacity_loss_percent",
+    "charge_efficiency",
+    "cycle_count",
+    "voltage_imbalance",
+    "charging_quality_score",
+    "thermal_runaway_risk",
+    "internal_resistance",
+    "daily_distance",
+    "charging_cycles_last_month",
+    "remaining_capacity",
+    "battery_stress_index",
+    "cooling_system_health",
+    "fast_charge_ratio",
+    "BMS_warning_count",
+    "vehicle_age_years"
+  ],
+  "label_mapping": {
+    "0": "normal",
+    "1": "abnormal",
+    "normal": "normal",
+    "failure": "abnormal"
+  },
+  "threshold": 0.2,
+  "metrics": {
+    "source_repository": "https://github.com/JIWOO1127/python-mini-team-project",
+    "source_branch": "model_ver2",
+    "source_commit": "be7caf5",
+    "test_rows": 6433,
+    "note": "LightGBM ver2 모델 번들입니다. 예측 확률이 0.2 이상이면 이상으로 분류합니다."
+  },
+  "risk_features": [
+    {
+      "name": "thermal_runaway_risk",
+      "label": "열폭주 위험도",
+      "direction": "high",
+      "unit": "점"
+    },
+    {
+      "name": "voltage_imbalance",
+      "label": "전압 불균형",
+      "direction": "high",
+      "unit": "점"
+    },
+    {
+      "name": "capacity_loss_percent",
+      "label": "용량 손실률",
+      "direction": "high",
+      "unit": "%"
+    },
+    {
+      "name": "fast_charge_ratio",
+      "label": "급속 충전 비율",
+      "direction": "high",
+      "unit": "%"
+    },
+    {
+      "name": "cycle_count",
+      "label": "충방전 횟수",
+      "direction": "high",
+      "unit": "회"
+    },
+    {
+      "name": "cooling_system_health",
+      "label": "냉각 시스템 상태",
+      "direction": "low",
+      "unit": "점"
+    },
+    {
+      "name": "charge_efficiency",
+      "label": "충전 효율",
+      "direction": "low",
+      "unit": "%"
+    }
+  ]
+}

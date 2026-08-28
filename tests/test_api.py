@@ -13,7 +13,10 @@ client = TestClient(app)
 def test_health():
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    body = response.json()
+    assert body["status"] == "ok"
+    assert body["active_model"] == "reviewed-xgb-3.2.0"
+    assert body["providers"]["charging"] == "chargecheck"
 
 
 @patch(
