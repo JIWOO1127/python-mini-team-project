@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from src.ml.model_adapter import dashboard_metadata, predict_vehicle, vehicles
+from src.ml.model_adapter import dashboard_metadata, predict_vehicle, random_vehicle_id
 from src.services.risk_factors import top_risk_factors
 
 
@@ -22,5 +22,10 @@ def dashboard() -> dict:
             "failure_rate": 9.96,
             "summary": "배터리 건강도, 용량 손실, 노화·열 위험 지표를 중심으로 고장 위험을 분석합니다.",
         },
-        "sample_vehicle_id": str(vehicles().iloc[0]["vehicle_id"]),
+        "sample_vehicle_id": random_vehicle_id(),
     }
+
+
+def sample_vehicle() -> dict:
+    """Return a fresh random vehicle ID from the active test dataset."""
+    return {"vehicle_id": random_vehicle_id()}

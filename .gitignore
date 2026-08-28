@@ -2,7 +2,18 @@
 .venv/
 __pycache__/
 .pytest_cache/
+.pytest-tmp/
 data/cache/
 data/test/*/vehicles.csv
 data/test/*/feature_profile.json
 models/*/*.pkl
+models/generated-xgb/
+
+# The active runtime bundle is required after a clean GitHub clone.
+!data/test/lightgbm-ver2/
+!data/test/lightgbm-ver2/vehicles.csv
+!data/test/lightgbm-ver2/feature_profile.json
+!data/test/default/
+!data/test/default/vehicles.csv
+!models/lightgbm-ver2/
+!models/lightgbm-ver2/lgbm_battery_model.pkl

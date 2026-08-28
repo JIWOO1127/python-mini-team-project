@@ -15,8 +15,17 @@ def test_health():
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "ok"
-    assert body["active_model"] == "reviewed-xgb-3.2.0"
+    assert body["active_model"] == "lightgbm-ver2"
     assert body["providers"]["charging"] == "chargecheck"
+
+
+@patch("src.backend.main.sample_vehicle", return_value={"vehicle_id": "EV999999"})
+def test_sample_vehicle_endpoint_returns_a_test_vehicle_id(mock_service):
+    response = client.get("/api/v1/sample-vehicle")
+
+    assert response.status_code == 200
+    assert response.json() == {"vehicle_id": "EV999999"}
+    mock_service.assert_called_once_with()
 
 
 @patch(

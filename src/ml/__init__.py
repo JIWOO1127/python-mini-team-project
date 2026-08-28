@@ -1,4 +1,1 @@
-"""EV 배터리 고장 예측 모델 패키지.
-
-Kaggle 커널의 실제 컬럼과 목표값을 확인한 뒤 학습 및 예측 모듈을 추가합니다.
-"""
+"""Active EV battery model adapter and manifest-backed runtime bundle."""

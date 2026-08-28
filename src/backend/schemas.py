@@ -35,6 +35,10 @@ class VehicleDiagnosisRequest(BaseModel):
     brand: VehicleBrand | None = None
 
 
+class SampleVehicleResponse(BaseModel):
+    vehicle_id: str = Field(min_length=1)
+
+
 class StationResponse(BaseModel):
     name: str
     address: str

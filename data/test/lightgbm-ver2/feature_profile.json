@@ -1,0 +1,79 @@
+{
+  "features": {
+    "capacity_loss_percent": {
+      "p10": 0.2,
+      "p50": 12.19,
+      "p90": 36.34
+    },
+    "charge_efficiency": {
+      "p10": 91.374,
+      "p50": 94.98,
+      "p90": 97.46
+    },
+    "cycle_count": {
+      "p10": 24.0,
+      "p50": 205.0,
+      "p90": 598.8
+    },
+    "voltage_imbalance": {
+      "p10": 8.702,
+      "p50": 18.33,
+      "p90": 32.108
+    },
+    "charging_quality_score": {
+      "p10": 6.9,
+      "p50": 53.3,
+      "p90": 86.4
+    },
+    "thermal_runaway_risk": {
+      "p10": 45.7,
+      "p50": 56.9,
+      "p90": 72.9
+    },
+    "internal_resistance": {
+      "p10": 0.36942,
+      "p50": 0.4814,
+      "p90": 0.6884
+    },
+    "daily_distance": {
+      "p10": 6.02,
+      "p50": 44.0,
+      "p90": 92.78
+    },
+    "charging_cycles_last_month": {
+      "p10": 1.0,
+      "p50": 4.0,
+      "p90": 10.0
+    },
+    "remaining_capacity": {
+      "p10": 36.832,
+      "p50": 64.02,
+      "p90": 92.172
+    },
+    "battery_stress_index": {
+      "p10": 7.8,
+      "p50": 33.2,
+      "p90": 60.8
+    },
+    "cooling_system_health": {
+      "p10": 54.1,
+      "p50": 72.8,
+      "p90": 90.2
+    },
+    "fast_charge_ratio": {
+      "p10": 0.113,
+      "p50": 0.319,
+      "p90": 0.576
+    },
+    "BMS_warning_count": {
+      "p10": 1.0,
+      "p50": 2.0,
+      "p90": 5.0
+    },
+    "vehicle_age_years": {
+      "p10": 2.76,
+      "p50": 6.63,
+      "p90": 10.28
+    }
+  }
+}

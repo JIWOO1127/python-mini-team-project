@@ -233,7 +233,13 @@ class EVGuardApp:
         ttk.Entry(input_card, textvariable=self.analysis_address_var).pack(fill="x", pady=(5, 14), ipady=7)
         self.diagnose_button = ttk.Button(input_card, text="데이터 추출 및 분석 시작  →", style="Primary.TButton", command=self.start_diagnosis)
         self.diagnose_button.pack(fill="x")
-        ttk.Button(input_card, text="테스트 차량 ID 자동 입력", style="Secondary.TButton", command=self.fill_sample_vehicle).pack(fill="x", pady=(8, 16))
+        self.sample_vehicle_button = ttk.Button(
+            input_card,
+            text="테스트 차량 ID 자동 입력",
+            style="Secondary.TButton",
+            command=self.fill_sample_vehicle,
+        )
+        self.sample_vehicle_button.pack(fill="x", pady=(8, 16))
         ttk.Separator(input_card, orient="horizontal").pack(fill="x", pady=(0, 14))
         ttk.Label(input_card, text="추출 데이터 미리보기", style="CardTitle.TLabel").pack(anchor="w")
         self.vehicle_preview = ttk.Frame(input_card, style="Card.TFrame")
@@ -362,7 +368,23 @@ class EVGuardApp:
         )
 
     def fill_sample_vehicle(self) -> None:
-        self.vehicle_id_var.set(self.sample_vehicle_id or "EV100001")
+        self.sample_vehicle_button.configure(state="disabled", text="차량 ID 불러오는 중...")
+        self._run_async(
+            self._get_sample_vehicle,
+            self._show_sample_vehicle,
+            self._show_sample_vehicle_error,
+        )
+
+    def _get_sample_vehicle(self) -> dict:
+        return self._request("GET", "/api/v1/sample-vehicle")
+
+    def _show_sample_vehicle(self, data: dict) -> None:
+        self.sample_vehicle_button.configure(state="normal", text="테스트 차량 ID 자동 입력")
+        self.vehicle_id_var.set(str(data["vehicle_id"]))
+
+    def _show_sample_vehicle_error(self, message: str) -> None:
+        self.sample_vehicle_button.configure(state="normal", text="테스트 차량 ID 자동 입력")
+        self._show_error(message)
 
     def load_dashboard(self) -> None:
         self._run_async(self._get_dashboard, self._show_dashboard, self._show_dashboard_error)

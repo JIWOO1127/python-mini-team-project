@@ -1,5 +1,4 @@
 {
-  "active_model": "reviewed-xgb-3.2.0",
   "charging_cache_minutes": 10,
   "service_center_cache_hours": 24,
   "supported_brands": ["Tesla", "Nissan", "Volkswagen"],

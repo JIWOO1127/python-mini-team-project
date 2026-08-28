@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import secrets
 from functools import lru_cache
 from pathlib import Path
 
@@ -16,11 +17,54 @@ class ModelBundleError(RuntimeError):
     pass
 
 
+_REQUIRED_MANIFEST_KEYS = {
+    "version",
+    "model_type",
+    "model_path",
+    "test_data_path",
+    "feature_profile_path",
+    "feature_columns",
+    "threshold",
+}
+
+
 @lru_cache(maxsize=1)
 def manifest() -> dict:
     if not MANIFEST_PATH.exists():
         raise ModelBundleError("모델 메타데이터 파일을 찾을 수 없습니다.")
     return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+
+
+def validate_bundle() -> dict:
+    """Validate the active model manifest and all referenced runtime files."""
+    current = manifest()
+    missing_keys = sorted(_REQUIRED_MANIFEST_KEYS.difference(current))
+    if missing_keys:
+        raise ModelBundleError(
+            f"모델 manifest 필수 항목이 없습니다: {', '.join(missing_keys)}"
+        )
+    if not isinstance(current["feature_columns"], list) or not current["feature_columns"]:
+        raise ModelBundleError("모델 manifest의 feature_columns가 비어 있습니다.")
+    for key in ("model_path", "test_data_path", "feature_profile_path"):
+        path = ROOT / current[key]
+        if not path.exists():
+            raise ModelBundleError(f"manifest 참조 파일을 찾을 수 없습니다: {path}")
+    vehicle_data = vehicles()
+    feature_profile = profile()
+    profile_features = feature_profile.get("features") if isinstance(feature_profile, dict) else None
+    if not isinstance(profile_features, dict):
+        raise ModelBundleError("모델 feature profile의 features 항목이 없습니다.")
+    missing_profile = sorted(set(current["feature_columns"]) - set(profile_features))
+    if missing_profile:
+        raise ModelBundleError(
+            f"feature profile 컬럼이 부족합니다: {', '.join(missing_profile)}"
+        )
+    missing_csv = sorted(set(current["feature_columns"]) - set(vehicle_data.columns))
+    if missing_csv:
+        raise ModelBundleError(
+            f"차량 CSV 피처 컬럼이 부족합니다: {', '.join(missing_csv)}"
+        )
+    return current
 
 
 @lru_cache(maxsize=1)
@@ -108,6 +152,15 @@ def find_vehicle(vehicle_id: str) -> pd.Series:
     if len(matches) > 1:
         raise ValueError("테스트 차량 ID가 중복되어 있습니다.")
     return matches.iloc[0]
+
+
+def random_vehicle_id() -> str:
+    """Return a non-empty, randomly selected ID from the active test bundle."""
+    ids = vehicles()["vehicle_id"].dropna().astype(str).str.strip()
+    candidates = list(dict.fromkeys(vehicle_id for vehicle_id in ids if vehicle_id))
+    if not candidates:
+        raise ModelBundleError("테스트 차량 데이터에 사용할 차량 ID가 없습니다.")
+    return secrets.choice(candidates)
 
 
 def _summary(row: pd.Series) -> dict:

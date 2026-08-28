@@ -14,14 +14,15 @@ from src.backend.schemas import (
     RecommendationRequest,
     RecommendationResponse,
     ServiceCenterRequest,
+    SampleVehicleResponse,
     VehicleDiagnosisRequest,
     VehicleDiagnosisResponse,
 )
-from src.backend.services import get_recommendations
+from src.ml.model_adapter import manifest, validate_bundle
 from src.providers.geocoding.kakao import ProviderError
-from src.providers.registry import settings
-from src.services.diagnosis import dashboard, diagnose
+from src.services.diagnosis import dashboard, diagnose, sample_vehicle
 from src.services.infrastructure import charging_stations, service_centers
+from src.services.recommendations import get_recommendations
 
 
 app = FastAPI(title="EV Battery & Infrastructure Assistant", version="2.0.0")
@@ -38,9 +39,10 @@ def index():
 
 @app.get("/health")
 def health():
+    validate_bundle()
     return {
         "status": "ok",
-        "active_model": settings()["active_model"],
+        "active_model": manifest()["version"],
         "providers": {
             "geocoding": "kakao-local",
             "weather": "kma-ultra-short-term",
@@ -54,6 +56,14 @@ def health():
 def get_dashboard():
     try:
         return dashboard()
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+
+@app.get("/api/v1/sample-vehicle", response_model=SampleVehicleResponse)
+def get_sample_vehicle() -> SampleVehicleResponse:
+    try:
+        return sample_vehicle()
     except Exception as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
